@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src = "./scripts/ajax.min.js"></script>
+	<script src = "./scripts/home.js"></script>
+
+</head>
+<body>
+	<div class="main" name = "main">
+		
+
+
+		<div id = "intro">
+		</div>
+
+		
+
+		
+		<h3> Want to log out? </h3>
+		<button onclick = "logout()">
+			Log Out
+		</button>
+		
+		<div id = "jointable" name="jointable">
+			<form name="tablejoin">
+				<h4>
+					Join Table
+				</h4>
+				<span>
+					<h5>
+						Table Id
+					</h5>
+					<input name="tableId" required placeholder="Table Id">
+				</span>
+				<span>
+					<h5>
+						Table Password
+					</h5>
+					<input name="tablePass" required placeholder="Table Password">
+				</span>
+			</form>
+			<button onclick="joinTable()">
+				Join Table Button
+			</button>
+
+		</div>
+
+		<div id = "admin">
+		</div>
+
+		
+
+	</div>
+</body>
+</html>
