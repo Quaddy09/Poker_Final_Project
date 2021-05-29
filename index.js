@@ -1,6 +1,9 @@
+
+// import stuff
 const express = require('express');
 const path = require('path')
 const {readFile} = require('fs').promises;
+const { v4: uuidv4 } = require('uuid');
 
 const {parse, stringify} = require('flatted');
 
@@ -13,6 +16,13 @@ const upload = multer();
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 
+const {Table} = require('./table.js');
+const {Stack} = require('./stack.js');
+const {Deck} = require('./deck.js');
+const {Chip} = require('./chip.js');
+const {Card} = require('./card.js');
+
+// configure app
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); 
 app.use(upload.array());
@@ -21,107 +31,78 @@ app.use(session({secret: "key1"}));
 
 app.use(express.static('/views/scripts'))
 
-
-const {Table} = require('@chevtek/poker-engine')
-
-
-let users = [];
-users.push({ id: 'sam', password: 'coble', authlevel :'1', tables: ['1'],  });
-users.push({id:'user',password:'pass', tables: ['1'],});
-users.push({id:'user2',password:'pass', tables:['1'],});
-
-const testTable = new Table();
-testTable.sitDown('sam', 1000);
-testTable.sitDown('user', 1000);
-testTable.sitDown('user2', 1000);
-
-testTable.name = 'Admin Test Table';
-testTable.password = 'tablepass';
-
-// testTable.dealCards();
-console.log(!!testTable.currentActor);
-
-const tables = {
-	'1': testTable,
-}
-
-
 app.set('view engine', 'pug');
 app.set('views',path.join( __dirname, 'views' ));
 
 
+// users and tables
+let users = {};
+const tables = {};
+
+// set up initial defulat table and users for testing
+users[uuidv4()] = { id: 'sam', password: 'coble', authlevel :'1', tables: ['1'],  };
+users[uuidv4()] = {id:'user',password:'pass', tables: ['1'],};
+users[uuidv4()] = {id:'user2',password:'pass', tables:['1'],};
+
+const testTable = new Table({
+	name: 'Test Table',
+	password: 'tablepass',
+});
+testTable.sitDown( 'sam' );
+testTable.sitDown( 'user' );
+testTable.sitDown( 'user2' );
+
+tables[uuidv4()] = testTable;
+
+
+
+
 const getContentType = extension => {
-
 	switch(extension){
-
 		case '.map':
-
 		case '.js':
 			return 'application/javascript';
-
 		case '.css':
 			return 'text/css';
-
 		case '.jpg':
 			return 'image/jpg';
-
 		case '.png':
 			return 'image/png';
-
 		case '.mp3':
 			return 'audio/mpeg';
-
 		case '.ico':
 			return 'image/vnd';
-
 		case '':
 			return  'text/html';
-
 		default:
 			throw `bad file extension: ${extension}`;
-
 	}
-
 }
 
 
-app.use( express.static( __dirname + '/poker' ));
+app.use( express.static( __dirname + '/Poker_Final_Project' ));
 
 
 
 app.get('/login', async (req, res) => {
-
 	res.render( 'login' );
 	// console.log( "sent login page" );
-
-
 });
 
 app.get('/signup', async (req, res) => {
-
 	res.render( 'signup' );
 	// console.log( "sent signup page" );
-
-
-
 });
 
 
 function checkSignIn(req, res, next){
-
 	if(req.session.user){
-
 		next();     //If session exists, proceed to page
-
 	} else {
-
 		var err = new Error("Not logged in!");
-
 		// console.log(req.session.user);
 		next(err);  //Error, trying to access unauthorized page!
-
 	}
-
 }
 
 
@@ -150,44 +131,23 @@ app.post('/logout', checkSignIn, (req, res) => {
 
 
 app.get('/scripts/*', async (req, res) => {
-
-	// console.log(req.url);
-
 	try{
-
 		switch(req.url){
-			
-
-			default: 
-
-					
+			default:
 				try{
-					
 					res.header('Content-Type', getContentType( path.extname(req.url) ) );
-				
-
 					res.send( await readFile( path.join( __dirname, 'views', req.url ) ) );
-
 				}
 				catch(err){
-
 					res.header('Content-Type', 'text/html');
-
 					res.send('404 Fie Not Found');
-
-
 					throw "404 file not found";
-
 				}
 		}
-
 	}
 	catch(err){
 		console.log(err);
 	}
-
-
-
 });
 
 
@@ -203,7 +163,7 @@ app.post( '/signup', async (req, res) => {
 
 		alreadyExists = false;
 
-		users.filter(function(user){
+		Object.values(users).filter(function(user){
 			if(user.id === req.body.id){
 				alreadyExists = true;
 				res.send(
@@ -221,60 +181,31 @@ app.post( '/signup', async (req, res) => {
 				password: req.body.password, 
 				tables: [],
 			};
-			users.push( newUser );
+			users[uuidv4] = newUser;
 
 			req.session.user = newUser;
 			res.send( {'redirect':'/home'} );
-
-
 		}
-		
-		
-
-
 	}
-
-
 });
 
 
 app.post('/login', function(req, res){
-
-
-
-
 	if(!req.body.id || !req.body.password){
-
 		res.render('login', {message: "Please enter both id and password"});
-
-
 	} else {
-
-
 		exists = false;
-		users.filter(function(user){
-
+		Object.values(users).filter(function(user){
 			if(user.id === req.body.id && user.password === req.body.password){
-
 				exists = true;
-
 				req.session.user = user;
 				res.send({'redirect':'/home'});
-
 			}
-
 		});
-
-
-		if( !exists ){
-			
+		if( !exists ) {
 			res.send({'redirect':'./login'});
-
       	}
-
-
 	}
-
 });
 
 app.use('/home', function(err, req, res, next){
@@ -288,22 +219,6 @@ app.use('/home', function(err, req, res, next){
 });
 
 
-
-app.post('/home/admindata', checkSignIn, (req, res) => {
-
-	// console.log( req.session.user.authlevel)
-	if( req.session.user.authlevel > 0 ) {
-
-		res.send({adminData:users});
-
-	}
-	else {
-		res.send( {} );
-		console.log('admin rejected');
-	}
-
-
-});
 
 app.post('/home/gototable', checkSignIn, (req, res) => {
 
@@ -344,15 +259,13 @@ app.get('/table/*', checkSignIn, (req, res) => {
 
 app.post('/table/*/getstate', checkSignIn, (req, res) => {
 
-	res.header('application/json');
-
 	const tableId = req.url.split(path.sep)[req.url.split(path.sep).length - 2];
 
 	if( tables[tableId] && req.session.user.tables.includes(tableId)) {
 		// console.log(tables[tableId])
 		
 
-		res.status(200).send(stringify(tables[tableId]));
+		res.header('application/json').status(200).send(stringify(tables[tableId]));
 
 
 
@@ -366,119 +279,8 @@ app.post('/table/*/getstate', checkSignIn, (req, res) => {
 
 
 });
-app.post('/table/*/dealCards', checkSignIn, (req, res) => {
-	const tableId = req.url.split(path.sep)[req.url.split(path.sep).length - 2];
-	try {
-		tables[tableId].dealCards();
-		res.header('application/json').status(200).send({
-			done: true,
-		});
-	} catch(e) {
-		res.header('application.json').status(400).send({
-			done: false,
-			err: e,
-		});
-	}
-});
-app.post('/table/*/doAction', checkSignIn, (req, res) => {
-	const tableId = req.url.split(path.sep)[req.url.split(path.sep).length - 2];
-
-	let player
-	try {
-		player = tables[tableId].players[tables[tableId].players.reduce((acc, cur, index) => {
-			return acc + ((cur===null?0:cur.id) == req.session.user.id ? index : 0); 
-		}, 0)];
-
-		if( tables[tableId] === undefined ) {
-			res.status(400).send({done:false,err:'table dosen\'t exist'});
-		} else if( !req.session.user.tables.includes(tableId) ) {
-			res.status(403).send({done:false,err:'not authorized'});
-		} else if( !player.legalActions().includes(req.body.action) ) {
-			res.status(400).send({done:false,err:'not legal'});
-		} else {
-			try {
-				player[req.body.action + 'Action'](parseInt(req.body.amount));
-				res.status(200).send({done:true});
 
 
-			} catch( e ) {
-				res.header('application/json').status(400).send({done:false,err:e});
-				throw( e );
-			}
-		}
-
-
-	} catch( e ) {
-		console.log('e',e);
-		res.status(400).send({done:false, err:'player not in game'});
-	}
-
-		
-
-});
-
-app.post('/table/*/getself', checkSignIn, (req, res) => {
-	const tableId = req.url.split(path.sep)[req.url.split(path.sep).length - 2];
-
-	if( tables[tableId] && req.session.user.tables.includes(tableId)) {
-		// console.log(tables[tableId])
-		
-		try{
-			res.header('application/json').status(200).send(stringify((() => {
-				for(let i = 0; i < tables[tableId].players.length; i++ ) {
-					if( tables[tableId].players[i].id === req.session.user.id ) {
-						return {player: tables[tableId].players[i], index: i};
-					}
-				}
-				throw new Error('no matching id');
-			})()));
-		} catch(e) {
-			console.log(e);
-			res.status(500).end();
-			throw e;
-		}
-
-
-
-	} else if( tables[tableId] ){
-		console.log('player not authorized');
-		res.status(308).end();
-	} else {
-		console.log('table doesn\'t exist');
-		res.status(404).end();
-	}
-});
-app.post('/table/*/getActions', checkSignIn, (req, res) => {
-	const tableId = req.url.split(path.sep)[req.url.split(path.sep).length - 2];
-
-	if( tables[tableId] && req.session.user.tables.includes(tableId)) {
-		// console.log(tables[tableId])
-		
-		let response = {};
-		if( tables[tableId].currentPosition == req.body.pos ) {
-			response.isPlayersTurn = true;
-			response.legalMoves = tables[tableId].currentActor.legalActions(); 
-			
-		} else {
-			response.isPlayersTurn = false;
-		}
-		if( tables[tableId].dealerPosition == req.body.pos && (tables[tableId].winners || tables[tableId].deck.length==0)) {
-			response.legalMoves = [];
-			response.legalMoves.push('deal');
-		}
-
-		res.header('application/json').status(200).send(response);
-
-
-
-	} else if( tables[tableId] ){
-		console.log('player not authorized');
-		res.status(308).end();
-	} else {
-		console.log('table doesn\'t exist');
-		res.status(404).end();
-	}
-});
 
 app.use('/table/*', function(err, req, res, next){
 	if( err.message != 'Not logged in!' ){
@@ -494,5 +296,5 @@ app.use('/table/*', function(err, req, res, next){
 });
 
 
-app.listen(process.env.PORT || 3001, () => console.log(`App Available`));
+app.listen(process.env.PORT || 3002, () => console.log(`App Available`));
 
