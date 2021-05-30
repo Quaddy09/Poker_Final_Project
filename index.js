@@ -2,7 +2,7 @@
 // import stuff
 const express = require('express');
 const path = require('path')
-const {readFile} = require('fs').promises;
+const {readFile, writeFile, readFileSync, writeFileSync} = require('fs');
 const { v4: uuidv4 } = require('uuid');
 
 const {parse, stringify} = require('flatted');
@@ -16,11 +16,12 @@ const upload = multer();
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 
-const {Table} = require('./table.js');
-const {Stack} = require('./stack.js');
-const {Deck} = require('./deck.js');
-const {Chip} = require('./chip.js');
-const {Card} = require('./card.js');
+const {Table} = require('./components/table.js');
+const {Stack} = require('./components/stack.js');
+const {Deck} = require('./components/deck.js');
+const {Chip} = require('./components/chip.js');
+const {Card} = require('./components/card.js');
+
 
 // configure app
 app.use(bodyParser.json());
@@ -37,26 +38,44 @@ app.set('views',path.join( __dirname, 'views' ));
 
 // users and tables
 let users = {};
-const tables = {};
+let tables = {};
 
-// set up initial defulat table and users for testing
-users[uuidv4()] = { id: 'sam', password: 'coble', authlevel :'1', tables: ['1'],  };
-users[uuidv4()] = {id:'user',password:'pass', tables: ['1'],};
-users[uuidv4()] = {id:'user2',password:'pass', tables:['1'],};
+const USERS_FILE = './data/users.json';
+const TABLES_FILE = './data/tables.json';
 
-const testTable = new Table({
-	name: 'Test Table',
-	password: 'tablepass',
-});
-testTable.sitDown( 'sam' );
-testTable.sitDown( 'user' );
-testTable.sitDown( 'user2' );
+// // set up initial defulat table and users for testing
+// const ttid = uuidv4();
+// users[uuidv4()] = { id: 'sam', password: 'coble', authlevel :'1', tables: [ttid],  };
+// users[uuidv4()] = {id:'user',password:'pass', tables: [ttid],};
+// users[uuidv4()] = {id:'user2',password:'pass', tables:[ttid],};
 
-tables[uuidv4()] = testTable;
+// const testTable = new Table({
+// 	name: 'Test Table',
+// 	password: 'tablepass',
+// 	elements: {},
+// });
 
-// test
+// testTable.elements[uuidv4()] = new Stack({stack: [new Chip({})]});
+// testTable.sitDown( 'sam' );
+// testTable.sitDown( 'user' );
+// testTable.sitDown( 'user2' );
+// tables[ttid] = testTable;
 
 
+const saveJSON = (data, filename) => {
+	writeFileSync( filename, JSON.stringify(data) );
+};
+const getJSON = ( filename ) => {
+	return JSON.parse(readFileSync(filename) );
+};
+const saveData = () => {
+	saveJSON(users, USERS_FILE);
+	saveJSON(tables, TABLES_FILE);
+};
+const getData = () => {
+	users = getJSON(USERS_FILE);
+	tables = getJSON(TABLES_FILE);
+}
 const getContentType = extension => {
 	switch(extension){
 		case '.map':
@@ -77,24 +96,7 @@ const getContentType = extension => {
 		default:
 			throw `bad file extension: ${extension}`;
 	}
-}
-
-
-app.use( express.static( __dirname + '/Poker_Final_Project' ));
-
-
-
-app.get('/login', async (req, res) => {
-	res.render( 'login' );
-	// console.log( "sent login page" );
-});
-
-app.get('/signup', async (req, res) => {
-	res.render( 'signup' );
-	// console.log( "sent signup page" );
-});
-
-
+};
 function checkSignIn(req, res, next){
 	if(req.session.user){
 		next();     //If session exists, proceed to page
@@ -105,29 +107,27 @@ function checkSignIn(req, res, next){
 	}
 }
 
+getData();
+console.log(tables);
 
-app.get('/home', checkSignIn, function(req, res){
+app.use( express.static( __dirname + '/Poker_Final_Project' ));
 
-	res.render('home', {id: req.session.user.id})
+app.get('/login', async (req, res) => { res.render( 'login' ); });
 
+app.get('/signup', async (req, res) => { res.render( 'signup' ); });
+
+app.get('/home', checkSignIn, function(req, res){ 
+	res.render('home', {id: req.session.user.id}) 
 });
 
 app.post('/home', checkSignIn, (req, res) => {
-
-	// console.log( req.session.user );
 	res.send({id: req.session.user.id, authlevel: req.session.user.authlevel });
-
-
 });
 
 app.post('/logout', checkSignIn, (req, res) => {
-
 	req.session.destroy();
 	res.send( {redirect: "/login" } );
-
 })
-
-
 
 
 app.get('/scripts/*', async (req, res) => {
@@ -206,19 +206,16 @@ app.post('/login', function(req, res){
 			res.send({'redirect':'./login'});
       	}
 	}
+	// console.log(req.client._httpMessage._header)
 });
 
 app.use('/home', function(err, req, res, next){
 	if( err ) {
 		// console.log('not logged in');
-
 	}
-
    //User should be authenticated! Redirect him to log in.
    res.redirect('/login');
 });
-
-
 
 app.post('/home/gototable', checkSignIn, (req, res) => {
 
@@ -248,7 +245,7 @@ app.get('/table/*', checkSignIn, (req, res) => {
 		if( req.session.user.tables.includes(tableId) ) {
 			res.render( 'table' );
 		} else {
-			console.log('get-player not authorized');
+			console.log('get-player not authorized\n'+req.session.user);
 			res.status(403).end();
 		}
 	} else {
@@ -258,16 +255,11 @@ app.get('/table/*', checkSignIn, (req, res) => {
 });
 
 app.post('/table/*/getstate', checkSignIn, (req, res) => {
-
 	const tableId = req.url.split(path.sep)[req.url.split(path.sep).length - 2];
 
 	if( tables[tableId] && req.session.user.tables.includes(tableId)) {
 		// console.log(tables[tableId])
-		
-
-		res.header('application/json').status(200).send(stringify(tables[tableId]));
-
-
+		res.header('application/json').status(200).send(JSON.stringify(tables[tableId]));
 
 	} else if( tables[tableId] ){
 		console.log('player not authorized');
@@ -276,7 +268,6 @@ app.post('/table/*/getstate', checkSignIn, (req, res) => {
 		console.log('table doesn\'t exist');
 		res.status(404).end();
 	}
-
 
 });
 

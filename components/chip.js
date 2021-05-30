@@ -1,5 +1,5 @@
 class Chip {
-	constuctor( params ) {
+	constructor( params ) {
 		this.value = params.value || 1;
 		this.rotation = params.rotation || 0;
 	}

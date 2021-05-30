@@ -1,0 +1,24 @@
+{
+  "38e16c22-9862-43c6-9f0c-a64d30273a86": {
+    "id": "sam",
+    "password": "coble",
+    "authlevel": "1",
+    "tables": [
+      "8bbe4326-5db6-40cf-9f5b-cb2f6cc4bae3"
+    ]
+  },
+  "e17af94b-85dc-46a3-8ddd-29f89e6d4f11": {
+    "id": "user",
+    "password": "pass",
+    "tables": [
+      "8bbe4326-5db6-40cf-9f5b-cb2f6cc4bae3"
+    ]
+  },
+  "a504f512-3a0c-4164-a6bb-d2ebaf113a8e": {
+    "id": "user2",
+    "password": "pass",
+    "tables": [
+      "8bbe4326-5db6-40cf-9f5b-cb2f6cc4bae3"
+    ]
+  }
+}
