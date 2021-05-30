@@ -1,17 +1,24 @@
 using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
-using Newtonsoft.Json;
+// using Newtonsoft.Json;
+using SimpleJSON;
 
-public class CasinoTable_Ellipse_00 : MonoBehaviour {	  
+public class CasinoTable : MonoBehaviour {	  
 
-	public string loginUrl;
-	public string getStateUrl;
+	public string url;
+	public string tableId;
 	public string username;
 	public string password;
 	public string cookie;
 	public bool isUpdating;
+
+	public List<GameObject> gameElements;
+	public string previousState;
+
+	public GameObject Chip;
 
 	public IEnumerator GetCookie(string url, string username, string password) {
 
@@ -50,8 +57,11 @@ public class CasinoTable_Ellipse_00 : MonoBehaviour {
 			} else {
 				if( www.isDone ) {
 					var result = System.Text.Encoding.UTF8.GetString(www.downloadHandler.data);
-					var table = JsonConvert.DeserializeObject(result);
-					Debug.Log(table.name);
+					JSONNode table = JSON.Parse(result);
+					if(!previousState.Equals(result)) {
+						UpdateScene( table );
+					}
+					previousState = result;
 
 				} else {
 					Debug.Log( "Couldn't get data" );
@@ -61,14 +71,40 @@ public class CasinoTable_Ellipse_00 : MonoBehaviour {
 		this.isUpdating = false;
 	}
 
+	public void UpdateScene( JSONNode table ) {
+		// Use table object element values to create game pieces in the scene
+		
+		// clear scene
+		foreach(GameObject o in gameElements) {
+			Destroy( o );
+		}
+
+		// add new elements to scene
+		foreach(JSONNode element in table["elements"]) {
+			GameObject o = Instantiate(Chip, new Vector3(
+				element["pos"]["x"], 
+				element["pos"]["y"],
+				1
+			), Quaternion.identity);
+
+			gameElements.Add(o);
+
+		}
+	}
+
     // Start is called before the first frame update
     void Start() {
+    	var loginUrl = url + "/login";
+    	gameElements = new List<GameObject>();
+    	previousState = "";
+
     	this.isUpdating = false;
         StartCoroutine(GetCookie(loginUrl, username, password));
     }
 
     // Update is called once per frame
     void Update() {
+    	var getStateUrl = url + "/table/" + tableId + "/getstate";
     	if(this.cookie != "" && !this.isUpdating) {
         	StartCoroutine(GetState(getStateUrl));
     	}

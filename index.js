@@ -108,7 +108,7 @@ function checkSignIn(req, res, next){
 }
 
 getData();
-console.log(tables);
+// console.log(tables);
 
 app.use( express.static( __dirname + '/Poker_Final_Project' ));
 
