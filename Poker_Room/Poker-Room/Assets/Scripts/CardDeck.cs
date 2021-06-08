@@ -158,6 +158,7 @@ public class CardDeck : MonoBehaviour {
 			baseDeck.transform.Rotate(0, -1*rotationSpeed, 0);
 			topCard.transform.Rotate(0,-1*rotationSpeed,0);
 		}
+		// rotation = baseDeck.transform.rotation.
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		float enter = 0.0f;
 		if(new Plane(Vector3.up, 0).Raycast(ray, out enter)) {
