@@ -270,7 +270,67 @@ app.post('/table/*/getstate', checkSignIn, (req, res) => {
 	}
 
 });
+app.post('/table/*/modifyelement/chipstack', checkSignIn, (req, res) => {
+	const tableId = req.url.split(path.sep)[req.url.split(path.sep).length-3];
 
+	if(tables[tableId] && req.session.user.tables.includes(tableId)) {
+		const element = {stack:[]};
+		element.pos = {
+			x: parseFloat(req.body.posX), 
+			y: parseFloat(req.body.posY)
+		};
+		element.id = req.body.elementId;
+		const values = JSON.parse(req.body.chipValues);
+		const rotations = JSON.parse(req.body.chipRotations);
+		for(let i = 0; i < values.length; i++) {
+			element.stack.push({value:values[i],rotation:rotations[i]});
+		}
+		tables[tableId].stacks[req.body.elementId] = element;
+		saveData();
+		res.status(200).end();
+	} else if( tables[tableId] ){
+		console.log('player not authorized');
+		res.status(403).end();
+	} else {
+		console.log('tde: '+tableId);
+		res.status(404).end();
+	}
+});
+app.post('/table/*/modifyelement/carddeck', checkSignIn, (req, res) => {
+	const tableId = req.url.split(path.sep)[req.url.split(path.sep).length-3];
+	if(tables[tableId] && req.session.user.tables.includes(tableId)) {
+		const element = {deck:[]};
+		element.pos = {
+			x: parseFloat(req.body.posX), 
+			y: parseFloat(req.body.posY)
+		};
+		element.id = req.body.elementId;
+		element.rotation = req.body.rotation;
+		const names = JSON.parse(req.body.cardNames);
+		const suits = JSON.parse(req.body.cardSuits);
+		const symbols = JSON.parse(req.body.cardSymbols);
+		const values = JSON.parse(req.body.cardValues);
+		const isUps = JSON.parse(req.body.cardIsUps);
+		for(let i = 0; i < values.length; i++) {
+			element.deck.push({
+				name:names[i],
+				suit:suits[i],
+				symbol:symbols[i],
+				value:values[i],
+				isUp:isUps[i],
+			});
+		}
+		tables[tableId].decks[req.body.elementId] = element;
+		saveData();
+		res.status(200).end();
+	} else if( tables[tableId] ){
+		console.log('player not authorized');
+		res.status(403).end();
+	} else {
+		console.log('tde: '+tableId);
+		res.status(404).end();
+	}
+});
 
 
 app.use('/table/*', function(err, req, res, next){
