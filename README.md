@@ -1,5 +1,7 @@
 Playing card table environment
 
+sorry for the lack of comments :(
+
 
 Our code is in the following files:
 
