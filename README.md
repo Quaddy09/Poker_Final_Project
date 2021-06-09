@@ -27,3 +27,9 @@ JSON data stored in ./data
 
 Webtest UI scripts and HTML: 
 ./views and ./views/scripts
+
+
+final exec is at (for macOS)
+./Poker_Room/Poker-Room/final_build
+
+run "node ." in root to start the server
