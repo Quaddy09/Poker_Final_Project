@@ -1,0 +1,622 @@
+{
+  "8bbe4326-5db6-40cf-9f5b-cb2f6cc4bae3": {
+    "name": "Test Table",
+    "password": "tablepass",
+    "seats": 10,
+    "players": [
+      "sam",
+      "user",
+      "user2",
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "stacks": {
+      "8a273344-57b5-407d-b27e-509fc3dbb07b": {
+        "stack": [
+          {
+            "value": 10,
+            "rotation": 0
+          },
+          {
+            "value": 10,
+            "rotation": 0
+          },
+          {
+            "value": 10,
+            "rotation": 0
+          },
+          {
+            "value": 10,
+            "rotation": 0
+          },
+          {
+            "value": 10,
+            "rotation": 0
+          },
+          {
+            "value": 10,
+            "rotation": 0
+          },
+          {
+            "value": 10,
+            "rotation": 0
+          },
+          {
+            "value": 10,
+            "rotation": 0
+          }
+        ],
+        "pos": {
+          "x": 0.5051897,
+          "y": -0.782742
+        },
+        "id": "8a273344-57b5-407d-b27e-509fc3dbb07b",
+        "isInfinite": true
+      },
+      "42dc4cde-a78d-4303-9968-7803d17f4f05": {
+        "stack": [
+          {
+            "value": 50,
+            "rotation": 0
+          },
+          {
+            "value": 50,
+            "rotation": 0
+          },
+          {
+            "value": 50,
+            "rotation": 0
+          },
+          {
+            "value": 50,
+            "rotation": 0
+          },
+          {
+            "value": 50,
+            "rotation": 0
+          },
+          {
+            "value": 50,
+            "rotation": 0
+          },
+          {
+            "value": 50,
+            "rotation": 0
+          },
+          {
+            "value": 50,
+            "rotation": 0
+          }
+        ],
+        "pos": {
+          "x": 0.6845905,
+          "y": -0.6343287
+        },
+        "id": "42dc4cde-a78d-4303-9968-7803d17f4f05",
+        "isInfinite": true
+      },
+      "0063fa18-2e5e-497b-b3e7-ebc47f8a99fd": {
+        "stack": [
+          {
+            "value": 5,
+            "rotation": 0
+          },
+          {
+            "value": 5,
+            "rotation": 0
+          },
+          {
+            "value": 5,
+            "rotation": 0
+          },
+          {
+            "value": 5,
+            "rotation": 0
+          },
+          {
+            "value": 5,
+            "rotation": 0
+          },
+          {
+            "value": 5,
+            "rotation": 0
+          },
+          {
+            "value": 5,
+            "rotation": 0
+          },
+          {
+            "value": 5,
+            "rotation": 0
+          }
+        ],
+        "pos": {
+          "x": 0.3821185,
+          "y": -0.8417549
+        },
+        "id": "0063fa18-2e5e-497b-b3e7-ebc47f8a99fd",
+        "isInfinite": true
+      },
+      "050b417a-923e-4471-b2a5-a3b664414315": {
+        "stack": [
+          {
+            "value": 25,
+            "rotation": 0
+          },
+          {
+            "value": 25,
+            "rotation": 0
+          },
+          {
+            "value": 25,
+            "rotation": 0
+          },
+          {
+            "value": 25,
+            "rotation": 0
+          },
+          {
+            "value": 25,
+            "rotation": 0
+          },
+          {
+            "value": 25,
+            "rotation": 0
+          },
+          {
+            "value": 25,
+            "rotation": 0
+          },
+          {
+            "value": 25,
+            "rotation": 0
+          }
+        ],
+        "pos": {
+          "x": 0.5984905,
+          "y": -0.7293262
+        },
+        "id": "050b417a-923e-4471-b2a5-a3b664414315",
+        "isInfinite": true
+      },
+      "813fae5d-c5fc-4b37-a4bd-170006166f2b": {
+        "stack": [
+          {
+            "value": 100,
+            "rotation": 0
+          },
+          {
+            "value": 100,
+            "rotation": 0
+          },
+          {
+            "value": 100,
+            "rotation": 0
+          },
+          {
+            "value": 100,
+            "rotation": 0
+          },
+          {
+            "value": 100,
+            "rotation": 0
+          },
+          {
+            "value": 100,
+            "rotation": 0
+          },
+          {
+            "value": 100,
+            "rotation": 0
+          },
+          {
+            "value": 100,
+            "rotation": 0
+          }
+        ],
+        "pos": {
+          "x": 0.7616639,
+          "y": -0.5414118
+        },
+        "id": "813fae5d-c5fc-4b37-a4bd-170006166f2b",
+        "isInfinite": true
+      }
+    },
+    "decks": {
+      "915e834d-6037-492e-8ce3-00951da8eeb2": {
+        "deck": [
+          {
+            "name": "J1",
+            "suit": "J",
+            "symbol": "🃏",
+            "value": "2",
+            "isUp": false
+          },
+          {
+            "name": "J1",
+            "suit": "J",
+            "symbol": "🃏",
+            "value": "1",
+            "isUp": false
+          },
+          {
+            "name": "Ks",
+            "suit": "s",
+            "symbol": "♠️",
+            "value": "K",
+            "isUp": false
+          },
+          {
+            "name": "Qs",
+            "suit": "s",
+            "symbol": "♠️",
+            "value": "Q",
+            "isUp": false
+          },
+          {
+            "name": "Js",
+            "suit": "s",
+            "symbol": "♠️",
+            "value": "J",
+            "isUp": false
+          },
+          {
+            "name": "Ts",
+            "suit": "s",
+            "symbol": "♠️",
+            "value": "T",
+            "isUp": false
+          },
+          {
+            "name": "9s",
+            "suit": "s",
+            "symbol": "♠️",
+            "value": "9",
+            "isUp": false
+          },
+          {
+            "name": "8s",
+            "suit": "s",
+            "symbol": "♠️",
+            "value": "8",
+            "isUp": false
+          },
+          {
+            "name": "7s",
+            "suit": "s",
+            "symbol": "♠️",
+            "value": "7",
+            "isUp": false
+          },
+          {
+            "name": "6s",
+            "suit": "s",
+            "symbol": "♠️",
+            "value": "6",
+            "isUp": false
+          },
+          {
+            "name": "5s",
+            "suit": "s",
+            "symbol": "♠️",
+            "value": "5",
+            "isUp": false
+          },
+          {
+            "name": "4s",
+            "suit": "s",
+            "symbol": "♠️",
+            "value": "4",
+            "isUp": false
+          },
+          {
+            "name": "3s",
+            "suit": "s",
+            "symbol": "♠️",
+            "value": "3",
+            "isUp": false
+          },
+          {
+            "name": "2s",
+            "suit": "s",
+            "symbol": "♠️",
+            "value": "2",
+            "isUp": false
+          },
+          {
+            "name": "As",
+            "suit": "s",
+            "symbol": "♠️",
+            "value": "A",
+            "isUp": false
+          },
+          {
+            "name": "Kh",
+            "suit": "h",
+            "symbol": "♥️",
+            "value": "K",
+            "isUp": false
+          },
+          {
+            "name": "Qh",
+            "suit": "h",
+            "symbol": "♥️",
+            "value": "Q",
+            "isUp": false
+          },
+          {
+            "name": "Jh",
+            "suit": "h",
+            "symbol": "♥️",
+            "value": "J",
+            "isUp": false
+          },
+          {
+            "name": "Th",
+            "suit": "h",
+            "symbol": "♥️",
+            "value": "T",
+            "isUp": false
+          },
+          {
+            "name": "9h",
+            "suit": "h",
+            "symbol": "♥️",
+            "value": "9",
+            "isUp": false
+          },
+          {
+            "name": "8h",
+            "suit": "h",
+            "symbol": "♥️",
+            "value": "8",
+            "isUp": false
+          },
+          {
+            "name": "7h",
+            "suit": "h",
+            "symbol": "♥️",
+            "value": "7",
+            "isUp": false
+          },
+          {
+            "name": "6h",
+            "suit": "h",
+            "symbol": "♥️",
+            "value": "6",
+            "isUp": false
+          },
+          {
+            "name": "5h",
+            "suit": "h",
+            "symbol": "♥️",
+            "value": "5",
+            "isUp": false
+          },
+          {
+            "name": "4h",
+            "suit": "h",
+            "symbol": "♥️",
+            "value": "4",
+            "isUp": false
+          },
+          {
+            "name": "3h",
+            "suit": "h",
+            "symbol": "♥️",
+            "value": "3",
+            "isUp": false
+          },
+          {
+            "name": "2h",
+            "suit": "h",
+            "symbol": "♥️",
+            "value": "2",
+            "isUp": false
+          },
+          {
+            "name": "Ah",
+            "suit": "h",
+            "symbol": "♥️",
+            "value": "A",
+            "isUp": false
+          },
+          {
+            "name": "Kd",
+            "suit": "d",
+            "symbol": "♦️",
+            "value": "K",
+            "isUp": false
+          },
+          {
+            "name": "Qd",
+            "suit": "d",
+            "symbol": "♦️",
+            "value": "Q",
+            "isUp": false
+          },
+          {
+            "name": "Jd",
+            "suit": "d",
+            "symbol": "♦️",
+            "value": "J",
+            "isUp": false
+          },
+          {
+            "name": "Td",
+            "suit": "d",
+            "symbol": "♦️",
+            "value": "T",
+            "isUp": false
+          },
+          {
+            "name": "9d",
+            "suit": "d",
+            "symbol": "♦️",
+            "value": "9",
+            "isUp": false
+          },
+          {
+            "name": "8d",
+            "suit": "d",
+            "symbol": "♦️",
+            "value": "8",
+            "isUp": false
+          },
+          {
+            "name": "7d",
+            "suit": "d",
+            "symbol": "♦️",
+            "value": "7",
+            "isUp": false
+          },
+          {
+            "name": "6d",
+            "suit": "d",
+            "symbol": "♦️",
+            "value": "6",
+            "isUp": false
+          },
+          {
+            "name": "5d",
+            "suit": "d",
+            "symbol": "♦️",
+            "value": "5",
+            "isUp": false
+          },
+          {
+            "name": "4d",
+            "suit": "d",
+            "symbol": "♦️",
+            "value": "4",
+            "isUp": false
+          },
+          {
+            "name": "3d",
+            "suit": "d",
+            "symbol": "♦️",
+            "value": "3",
+            "isUp": false
+          },
+          {
+            "name": "2d",
+            "suit": "d",
+            "symbol": "♦️",
+            "value": "2",
+            "isUp": false
+          },
+          {
+            "name": "Ad",
+            "suit": "d",
+            "symbol": "♦️",
+            "value": "A",
+            "isUp": false
+          },
+          {
+            "name": "Ks",
+            "suit": "c",
+            "symbol": "♣️",
+            "value": "K",
+            "isUp": false
+          },
+          {
+            "name": "Qs",
+            "suit": "c",
+            "symbol": "♣️",
+            "value": "Q",
+            "isUp": false
+          },
+          {
+            "name": "Js",
+            "suit": "c",
+            "symbol": "♣️",
+            "value": "J",
+            "isUp": false
+          },
+          {
+            "name": "Ts",
+            "suit": "c",
+            "symbol": "♣️",
+            "value": "T",
+            "isUp": false
+          },
+          {
+            "name": "9s",
+            "suit": "c",
+            "symbol": "♣️",
+            "value": "9",
+            "isUp": false
+          },
+          {
+            "name": "8s",
+            "suit": "c",
+            "symbol": "♣️",
+            "value": "8",
+            "isUp": false
+          },
+          {
+            "name": "7s",
+            "suit": "c",
+            "symbol": "♣️",
+            "value": "7",
+            "isUp": false
+          },
+          {
+            "name": "6s",
+            "suit": "c",
+            "symbol": "♣️",
+            "value": "6",
+            "isUp": false
+          },
+          {
+            "name": "5s",
+            "suit": "c",
+            "symbol": "♣️",
+            "value": "5",
+            "isUp": false
+          },
+          {
+            "name": "4s",
+            "suit": "c",
+            "symbol": "♣️",
+            "value": "4",
+            "isUp": false
+          },
+          {
+            "name": "3s",
+            "suit": "c",
+            "symbol": "♣️",
+            "value": "3",
+            "isUp": false
+          },
+          {
+            "name": "2s",
+            "suit": "c",
+            "symbol": "♣️",
+            "value": "2",
+            "isUp": false
+          },
+          {
+            "name": "As",
+            "suit": "c",
+            "symbol": "♣️",
+            "value": "A",
+            "isUp": false
+          }
+        ],
+        "pos": {
+          "x": 0.5211713,
+          "y": -0.6429164
+        },
+        "id": "915e834d-6037-492e-8ce3-00951da8eeb2",
+        "rotation": "51.00002",
+        "isInfinite": true
+      }
+    }
+  }
+}

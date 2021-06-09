@@ -52,7 +52,7 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.5000001
-  m_Height: 2
+  m_Height: 1
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!114 &284667465842000251
@@ -67,11 +67,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15c7027e2376441bcad0d4e0620657ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deltaX: 0
-  deltaZ: 0
   elementId: 
   updateUrl: 
   CHIP_HEIGHT: 0
   chipReferences: []
+  chipStack: {fileID: 0}
   chipValues: 
-  chipRotations: 
+  chipRotations: []
+  isInfinite: 0

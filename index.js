@@ -68,11 +68,11 @@ const saveJSON = (data, filename) => {
 const getJSON = ( filename ) => {
 	return JSON.parse(readFileSync(filename) );
 };
-const saveData = () => {
+const saveData = async () => {
 	saveJSON(users, USERS_FILE);
 	saveJSON(tables, TABLES_FILE);
 };
-const getData = () => {
+const getData = async () => {
 	users = getJSON(USERS_FILE);
 	tables = getJSON(TABLES_FILE);
 }
@@ -112,6 +112,9 @@ getData();
 
 app.use( express.static( __dirname + '/Poker_Final_Project' ));
 
+
+
+// WEBUI TESTING
 app.get('/login', async (req, res) => { res.render( 'login' ); });
 
 app.get('/signup', async (req, res) => { res.render( 'signup' ); });
@@ -127,8 +130,7 @@ app.post('/home', checkSignIn, (req, res) => {
 app.post('/logout', checkSignIn, (req, res) => {
 	req.session.destroy();
 	res.send( {redirect: "/login" } );
-})
-
+});
 
 app.get('/scripts/*', async (req, res) => {
 	try{
@@ -150,6 +152,53 @@ app.get('/scripts/*', async (req, res) => {
 	}
 });
 
+app.use('/home', function(err, req, res, next){
+	if( err ) {
+		// console.log('not logged in');
+	}
+   //User should be authenticated! Redirect him to log in.
+   res.redirect('/login');
+});
+
+app.post('/home/gototable', checkSignIn, (req, res) => {
+
+	if( tables[req.body.tableId] && 
+		tables[req.body.tableId].password === req.body.tablePassword) {
+
+		if( !req.session.user.tables.includes(req.body.tableId)) {
+			req.session.user.tables.push(req.body.tableId);
+		}
+
+		res.status(200).header('application/json').send({
+			redirect: '/table/' + req.body.tableId,
+		});
+	} else {
+		res.status(403).header('application/json').send({
+			err: 'Invalid Table ID or Password',
+		});
+	}
+
+});
+
+app.get('/table/*', checkSignIn, (req, res) => {
+	const tableId = req.url.split(path.sep)[req.url.split(path.sep).length-1];
+	
+	if( tables[tableId] ) {
+
+		if( req.session.user.tables.includes(tableId) ) {
+			res.render( 'table' );
+		} else {
+			console.log('get-player not authorized\n'+req.session.user);
+			res.status(403).end();
+		}
+	} else {
+		console.log('get-table doesn\'t exist' );
+		res.status(404).end();
+	}
+});
+
+
+// USEFUL STUFF
 
 app.post( '/signup', async (req, res) => {
 
@@ -209,51 +258,6 @@ app.post('/login', function(req, res){
 	// console.log(req.client._httpMessage._header)
 });
 
-app.use('/home', function(err, req, res, next){
-	if( err ) {
-		// console.log('not logged in');
-	}
-   //User should be authenticated! Redirect him to log in.
-   res.redirect('/login');
-});
-
-app.post('/home/gototable', checkSignIn, (req, res) => {
-
-	if( tables[req.body.tableId] && 
-		tables[req.body.tableId].password === req.body.tablePassword) {
-
-		if( !req.session.user.tables.includes(req.body.tableId)) {
-			req.session.user.tables.push(req.body.tableId);
-		}
-
-		res.status(200).header('application/json').send({
-			redirect: '/table/' + req.body.tableId,
-		});
-	} else {
-		res.status(403).header('application/json').send({
-			err: 'Invalid Table ID or Password',
-		});
-	}
-
-});
-
-app.get('/table/*', checkSignIn, (req, res) => {
-	const tableId = req.url.split(path.sep)[req.url.split(path.sep).length-1];
-	
-	if( tables[tableId] ) {
-
-		if( req.session.user.tables.includes(tableId) ) {
-			res.render( 'table' );
-		} else {
-			console.log('get-player not authorized\n'+req.session.user);
-			res.status(403).end();
-		}
-	} else {
-		console.log('get-table doesn\'t exist' );
-		res.status(404).end();
-	}
-});
-
 app.post('/table/*/getstate', checkSignIn, (req, res) => {
 	const tableId = req.url.split(path.sep)[req.url.split(path.sep).length - 2];
 
@@ -280,6 +284,7 @@ app.post('/table/*/modifyelement/chipstack', checkSignIn, (req, res) => {
 			y: parseFloat(req.body.posY)
 		};
 		element.id = req.body.elementId;
+		element.isInfinite = JSON.parse(req.body.isInfinite);
 		const values = JSON.parse(req.body.chipValues);
 		const rotations = JSON.parse(req.body.chipRotations);
 		for(let i = 0; i < values.length; i++) {
@@ -296,6 +301,7 @@ app.post('/table/*/modifyelement/chipstack', checkSignIn, (req, res) => {
 		res.status(404).end();
 	}
 });
+
 app.post('/table/*/modifyelement/carddeck', checkSignIn, (req, res) => {
 	const tableId = req.url.split(path.sep)[req.url.split(path.sep).length-3];
 	if(tables[tableId] && req.session.user.tables.includes(tableId)) {
@@ -320,6 +326,7 @@ app.post('/table/*/modifyelement/carddeck', checkSignIn, (req, res) => {
 				isUp:isUps[i],
 			});
 		}
+		element.isInfinite = JSON.parse(req.body.isInfinite);
 		tables[tableId].decks[req.body.elementId] = element;
 		saveData();
 		res.status(200).end();
@@ -331,7 +338,22 @@ app.post('/table/*/modifyelement/carddeck', checkSignIn, (req, res) => {
 		res.status(404).end();
 	}
 });
+app.post('/table/*/deleteelement', checkSignIn, (req, res) => {
+	const tableId = req.url.split(path.sep)[req.url.split(path.sep).length-2];
 
+	if(tables[tableId] && req.session.user.tables.includes(tableId)) {
+		delete tables[tableId].decks[req.body.elementId];
+		delete tables[tableId].stacks[req.body.elementId];
+		saveData();
+		res.status(200).end();
+	} else if( tables[tableId] ){
+		console.log('player not authorized');
+		res.status(403).end();
+	} else {
+		console.log('tde: '+tableId);
+		res.status(404).end();
+	}
+});
 
 app.use('/table/*', function(err, req, res, next){
 	if( err.message != 'Not logged in!' ){

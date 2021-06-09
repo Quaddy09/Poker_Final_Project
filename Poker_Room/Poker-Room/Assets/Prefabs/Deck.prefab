@@ -74,9 +74,10 @@ MonoBehaviour:
   cardSymbols: []
   cardValues: []
   cardIsUps: 
-  cardDeck: {fileID: -4704448705016008005}
+  cardDeck: {fileID: 0}
   elementId: 
   updateUrl: 
   rotation: 0
   defaultScale: 0.01
-  defaultHeight: 0.016
+  defaultHeight: 0.014
+  isInfinite: 0
